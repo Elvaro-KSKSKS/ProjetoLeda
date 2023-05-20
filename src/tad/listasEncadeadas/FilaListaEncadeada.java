@@ -5,43 +5,53 @@ import tad.fila.FilaIF;
 import tad.fila.FilaVaziaException;
 
 public class FilaListaEncadeada implements FilaIF<NodoListaEncadeada<Integer>> {
-	
+
 	private ListaEncadeadaIF<Integer> fila;
+
+	public FilaListaEncadeada() {
+		fila = new ListaEncadeada<>();
+	}
 
 	@Override
 	public void enfileirar(NodoListaEncadeada<Integer> item) throws FilaCheiaException {
-		// TODO Auto-generated method stub
-		
+		fila.adicionar(item);
 	}
 
 	@Override
 	public NodoListaEncadeada<Integer> desenfileirar() throws FilaVaziaException {
-		// TODO Auto-generated method stub
-		return null;
+		if (isEmpty()) {
+			throw new FilaVaziaException("A fila está vazia.");
+		}
+		NodoListaEncadeada<Integer> cabeca = verificarCabeca();
+		fila.remover(0);
+		return cabeca;
 	}
 
 	@Override
 	public NodoListaEncadeada<Integer> verificarCauda() {
-		// TODO Auto-generated method stub
-		return null;
+		if (isEmpty()) {
+			return null;
+		}
+		return fila.obter(fila.tamanho() - 1);
 	}
 
 	@Override
 	public NodoListaEncadeada<Integer> verificarCabeca() {
-		// TODO Auto-generated method stub
-		return null;
+		if (isEmpty()) {
+			return null;
+		}
+		return fila.obter(0);
 	}
 
 	@Override
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
+		return fila.tamanho() == 0;
 	}
 
 	@Override
 	public boolean isFull() {
-		// TODO Auto-generated method stub
+		// A lista encadeada não possui limite de capacidade, portanto a fila nunca fica cheia.
 		return false;
 	}
-
 }
+

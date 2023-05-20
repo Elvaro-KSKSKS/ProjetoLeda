@@ -1,42 +1,64 @@
 package tad.pilha;
 
 public class MinhaPilha implements PilhaIF<Integer> {
-	
-	private int tamanho = 10;
-	private Integer[] meusDados = null;
 
-	public MinhaPilha(int tamanho) {
-		this.tamanho = tamanho;
-	}
-	
-	public MinhaPilha() {
-	}
+    private int tamanho;
+    private Integer[] meusDados;
+    private int topo;
 
-	@Override
-	public void empilhar(Integer item) {
-		throw new UnsupportedOperationException("Implementar");
-		
-	}
+    public MinhaPilha(int tamanho) {
+        this.tamanho = tamanho;
+        this.meusDados = new Integer[tamanho];
+        this.topo = -1;
+    }
 
-	@Override
-	public Integer desempilhar() {
-		throw new UnsupportedOperationException("Implementar");
-	}
+    public MinhaPilha() {
+        this(10); // Chama o construtor com tamanho padrão de 10 elementos
+    }
 
-	@Override
-	public Integer topo() {
-		throw new UnsupportedOperationException("Implementar");
-	}
+    @Override
+    public void empilhar(Integer item) {
+        if (topo == tamanho - 1) {
+            throw new StackOverflowError("A pilha está cheia");
+        }
+        topo++;
+        meusDados[topo] = item;
+    }
 
-	@Override
-	public PilhaIF<Integer> multitop(int k) {
-		throw new UnsupportedOperationException("Implementar");
-	}
+    @Override
+    public Integer desempilhar() {
+        if (isEmpty()) {
+            throw new IllegalStateException("A pilha está vazia");
+        }
+        Integer item = meusDados[topo];
+        meusDados[topo] = null;
+        topo--;
+        return item;
+    }
 
-	@Override
-	public boolean isEmpty() {
-		throw new UnsupportedOperationException("Implementar");
-	}
+    @Override
+    public Integer topo() {
+        if (isEmpty()) {
+            throw new IllegalStateException("A pilha está vazia");
+        }
+        return meusDados[topo];
+    }
 
+    @Override
+    public PilhaIF<Integer> multitop(int k) {
+        if (k <= 0 || k > tamanho) {
+            throw new IllegalArgumentException("O valor de k é inválido");
+        }
 
+        PilhaIF<Integer> multitopPilha = new MinhaPilha(k);
+        for (int i = topo; i >= topo - k + 1; i--) {
+            multitopPilha.empilhar(meusDados[i]);
+        }
+        return multitopPilha;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return topo == -1;
+    }
 }
